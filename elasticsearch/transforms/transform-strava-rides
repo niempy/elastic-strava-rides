@@ -1,0 +1,133 @@
+PUT _transform/transform-strava-rides
+{
+  "source": {
+    "index": [
+      "strava*"
+    ],
+    "runtime_mappings": {
+      "elapsed_time": {
+        "type": "double",
+        "script": {
+          "source": "emit((doc[\"@timestamp\"].value.millis + (doc[\"strava.utc_offset\"].value * 1000 ) - doc[\"strava.start_date\"].value.millis) / 1000)"
+        }
+      },
+      "duration": {
+        "type": "long",
+        "script": {
+          "source": "emit(1)"
+        }
+      }
+    }
+  },
+  "pivot": {
+    "group_by": {
+      "strava.upload_id": {
+        "terms": {
+          "field": "strava.upload_id"
+        }
+      },
+      "strava.sport_type": {
+        "terms": {
+          "field": "strava.sport_type"
+        }
+      },
+      "strava.name": {
+        "terms": {
+          "field": "strava.name"
+        }
+      },
+      "@timestamp": {
+        "date_histogram": {
+          "field": "@timestamp",
+          "calendar_interval": "1d"
+        }
+      }
+    },
+    "aggregations": {
+      "data.temp.min": {
+        "min": {
+          "field": "data.temp"
+        }
+      },
+      "data.temp.avg": {
+        "avg": {
+          "field": "data.temp"
+        }
+      },
+      "data.temp.max": {
+        "max": {
+          "field": "data.temp"
+        }
+      },
+      "strava.average_cadence.avg": {
+        "avg": {
+          "field": "strava.average_cadence"
+        }
+      },
+      "strava.average_heartrate.avg": {
+        "avg": {
+          "field": "strava.average_heartrate"
+        }
+      },
+      "strava.average_watts.avg": {
+        "avg": {
+          "field": "strava.average_watts"
+        }
+      },
+      "strava.elapsed_time.max": {
+        "max": {
+          "field": "strava.elapsed_time"
+        }
+      },
+      "strava.average_speed.avg": {
+        "avg": {
+          "field": "strava.average_speed"
+        }
+      },
+      "strava.distance.max": {
+        "max": {
+          "field": "strava.distance"
+        }
+      },
+      "strava.max_heartrate.max": {
+        "max": {
+          "field": "strava.max_heartrate"
+        }
+      },
+      "strava.max_speed.max": {
+        "max": {
+          "field": "strava.max_speed"
+        }
+      },
+      "strava.max_watts.max": {
+        "max": {
+          "field": "strava.max_watts"
+        }
+      },
+      "strava.moving_time.max": {
+        "max": {
+          "field": "strava.moving_time"
+        }
+      },
+      "strava.total_elevation_gain.max": {
+        "max": {
+          "field": "strava.total_elevation_gain"
+        }
+      },
+      "strava.weighted_average_watts.avg": {
+        "avg": {
+          "field": "strava.weighted_average_watts"
+        }
+      }
+    }
+  },
+  "description": "Get per day view on numbers, sync on field event.ingested",
+  "dest": {
+    "index": "transform-strava-data"
+  },
+  "sync": {
+    "time": {
+      "field": "event.ingested"
+    }
+  }
+}
