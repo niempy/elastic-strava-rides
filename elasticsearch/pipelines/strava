@@ -1,0 +1,30 @@
+PUT _ingest/pipeline/strava
+{
+  "description": "Pipeline for processing all incoming Strava documents.\r\n",
+  "version": 1,
+  "processors": [
+    {
+      "set": {
+        "description": "Add time when event was ingested.",
+        "field": "event.ingested",
+        "copy_from": "_ingest.timestamp",
+        "on_failure": [
+          {
+            "set": {
+              "description": "Set 'error.message'",
+              "field": "error.message",
+              "value": "Processor {{ _ingest.on_failure_processor_type }} with tag {{ _ingest.on_failure_processor_tag }} in pipeline {{ _ingest.on_failure_pipeline }} failed with message {{ _ingest.on_failure_message }}",
+              "override": false
+            }
+          }
+        ]
+      }
+    },
+    {
+      "append": {
+        "field": "ingest.pipeline",
+        "value": "strava"
+      }
+    }
+  ]
+}
