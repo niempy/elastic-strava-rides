@@ -1,0 +1,285 @@
+PUT /_index_template/strava
+{
+  "index_patterns" : ["strava*"],
+  "priority" : 0,
+  "template": {
+    "settings" : {
+      "number_of_shards" : 1,
+      "default_pipeline": "strava"
+    },
+    "mappings": {
+      "dynamic_templates": [
+        {
+          "stringsaskeywords": {
+            "match": "*",
+            "match_mapping_type": "string",
+            "mapping": {
+              "type": "keyword"
+            }
+          }
+        }
+      ],
+      "properties": {
+        "@timestamp": {
+          "type": "date"
+        },
+        "@version": {
+          "type": "keyword"
+        },
+        "data": {
+          "properties": {
+            "altitude": {
+              "type": "float"
+            },
+            "cadence": {
+              "type": "long"
+            },
+            "distance": {
+              "type": "float"
+            },
+            "grade_smooth": {
+              "type": "float"
+            },
+            "heartrate": {
+              "type": "long"
+            },
+            "latlng": {
+              "type": "geo_point"
+            },
+            "moving": {
+              "type": "boolean"
+            },
+            "temp": {
+              "type": "long"
+            },
+            "velocity_smooth": {
+              "type": "float"
+            },
+            "watts": {
+              "type": "long"
+            }
+          }
+        },
+        "event": {
+          "properties": {
+            "ingested": {
+              "type": "date"
+            }
+          }
+        },
+        "ingest": {
+          "properties": {
+            "pipeline": {
+              "type": "keyword"
+            }
+          }
+        },
+        "segment": {
+          "properties": {
+            "segment": {
+              "properties": {
+                "dest": {
+                  "properties": {
+                    "geo": {
+                      "type": "geo_point"
+                    }
+                  }
+                },
+                "source": {
+                  "properties": {
+                    "geo": {
+                      "type": "geo_point"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "strava": {
+          "properties": {
+            "achievement_count": {
+              "type": "long"
+            },
+            "athlete": {
+              "properties": {
+                "id": {
+                  "type": "long"
+                },
+                "resource_state": {
+                  "type": "long"
+                }
+              }
+            },
+            "athlete_count": {
+              "type": "long"
+            },
+            "average_cadence": {
+              "type": "float"
+            },
+            "average_heartrate": {
+              "type": "float"
+            },
+            "average_speed": {
+              "type": "float"
+            },
+            "average_temp": {
+              "type": "long"
+            },
+            "average_watts": {
+              "type": "float"
+            },
+            "comment_count": {
+              "type": "long"
+            },
+            "commute": {
+              "type": "boolean"
+            },
+            "device_watts": {
+              "type": "boolean"
+            },
+            "display_hide_heartrate_option": {
+              "type": "boolean"
+            },
+            "distance": {
+              "type": "float"
+            },
+            "elapsed_time": {
+              "type": "long"
+            },
+            "elev_high": {
+              "type": "float"
+            },
+            "elev_low": {
+              "type": "float"
+            },
+            "end_latlng": {
+              "type": "float"
+            },
+            "external_id": {
+              "type": "keyword"
+            },
+            "flagged": {
+              "type": "boolean"
+            },
+            "from_accepted_tag": {
+              "type": "boolean"
+            },
+            "gear_id": {
+              "type": "keyword"
+            },
+            "has_heartrate": {
+              "type": "boolean"
+            },
+            "has_kudoed": {
+              "type": "boolean"
+            },
+            "heartrate_opt_out": {
+              "type": "boolean"
+            },
+            "id": {
+              "type": "long"
+            },
+            "kilojoules": {
+              "type": "float"
+            },
+            "kudos_count": {
+              "type": "long"
+            },
+            "location_country": {
+              "type": "keyword"
+            },
+            "manual": {
+              "type": "boolean"
+            },
+            "map": {
+              "properties": {
+                "id": {
+                  "type": "keyword"
+                },
+                "resource_state": {
+                  "type": "long"
+                },
+                "summary_polyline": {
+                  "type": "keyword"
+                }
+              }
+            },
+            "max_heartrate": {
+              "type": "float"
+            },
+            "max_speed": {
+              "type": "float"
+            },
+            "max_watts": {
+              "type": "long"
+            },
+            "moving_time": {
+              "type": "long"
+            },
+            "name": {
+              "type": "keyword"
+            },
+            "photo_count": {
+              "type": "long"
+            },
+            "pr_count": {
+              "type": "long"
+            },
+            "private": {
+              "type": "boolean"
+            },
+            "resource_state": {
+              "type": "long"
+            },
+            "sport_type": {
+              "type": "keyword"
+            },
+            "start_date": {
+              "type": "date"
+            },
+            "start_date_local": {
+              "type": "date"
+            },
+            "start_latlng": {
+              "type": "float"
+            },
+            "timezone": {
+              "type": "keyword"
+            },
+            "total_elevation_gain": {
+              "type": "float"
+            },
+            "total_photo_count": {
+              "type": "long"
+            },
+            "trainer": {
+              "type": "boolean"
+            },
+            "type": {
+              "type": "keyword"
+            },
+            "upload_id": {
+              "type": "long"
+            },
+            "upload_id_str": {
+              "type": "keyword"
+            },
+            "utc_offset": {
+              "type": "float"
+            },
+            "visibility": {
+              "type": "keyword"
+            },
+            "weighted_average_watts": {
+              "type": "long"
+            },
+            "workout_type": {
+              "type": "long"
+            }
+          }
+        }
+      }
+    }
+  }
+}
